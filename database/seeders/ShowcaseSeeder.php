@@ -22,7 +22,7 @@ class ShowcaseSeeder extends Seeder
         $dosen = User::updateOrCreate(
             ['email' => 'dosen@polibatam.ac.id'],
             [
-                'name' => 'Dr. Rina Kurniawati',
+                'name' => 'Erzi Hidayat S.T., M.Kom.',
                 'password' => Hash::make('password'),
                 'role' => 'dosen',
                 'nip' => '198504122010012001',

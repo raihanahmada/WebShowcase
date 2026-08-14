@@ -20,7 +20,7 @@ class ShowcaseSeeder extends Seeder
     public function run(): void
     {
         $dosen = User::updateOrCreate(
-            ['email' => 'dosen@polibatam.ac.id'],
+            ['email' => 'dosen@pcr.ac.id'],
             [
                 'name' => 'Erzi Hidayat S.T., M.Kom.',
                 'password' => Hash::make('password'),
@@ -30,7 +30,7 @@ class ShowcaseSeeder extends Seeder
         );
 
         $dosenLain = User::updateOrCreate(
-            ['email' => 'budi@polibatam.ac.id'],
+            ['email' => 'budi@pcr.ac.id'],
             [
                 'name' => 'Budi Santoso, M.Kom.',
                 'password' => Hash::make('password'),
@@ -40,13 +40,35 @@ class ShowcaseSeeder extends Seeder
         );
 
         User::updateOrCreate(
-            ['email' => 'admin@polibatam.ac.id'],
+            ['email' => 'admin@pcr.ac.id'],
             [
                 'name' => 'Admin Prodi',
                 'password' => Hash::make('password'),
                 'role' => 'admin',
             ],
         );
+
+        // Dosen tambahan supaya daftar pilihan pembimbing pada form produk
+        // tidak cuma berisi satu nama.
+        $dosenTambahan = [
+            ['nama' => 'Dr. Siti Rahmawati, M.T.', 'email' => 'siti.rahmawati@pcr.ac.id', 'nip' => '198201152008012003'],
+            ['nama' => 'Ahmad Fauzi, S.Kom., M.Cs.', 'email' => 'ahmad.fauzi@pcr.ac.id', 'nip' => '198711202012041005'],
+            ['nama' => 'Dr. Ir. Hendra Wijaya, M.Eng.', 'email' => 'hendra.wijaya@pcr.ac.id', 'nip' => '197905082005011004'],
+            ['nama' => 'Lestari Ningsih, S.T., M.T.', 'email' => 'lestari.ningsih@pcr.ac.id', 'nip' => '199206302018032001'],
+            ['nama' => 'Muhammad Iqbal, M.Kom.', 'email' => 'm.iqbal@pcr.ac.id', 'nip' => '199401122019031002'],
+        ];
+
+        foreach ($dosenTambahan as $d) {
+            User::updateOrCreate(
+                ['email' => $d['email']],
+                [
+                    'name' => $d['nama'],
+                    'password' => Hash::make('password'),
+                    'role' => 'dosen',
+                    'nip' => $d['nip'],
+                ],
+            );
+        }
 
         $categories = collect([
             ['name' => 'Web Application', 'icon' => 'globe'],

@@ -48,8 +48,8 @@ export default function ProductForm({ data, setData, errors, options, existingPo
 
     return (
         <div className="space-y-6">
-            <section className="rounded-xl border border-neutral-200 bg-white p-6">
-                <h2 className="mb-4 text-sm font-semibold tracking-wide text-neutral-500 uppercase">
+            <section className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
+                <h2 className="mb-4 text-sm font-semibold tracking-wide text-pcr-700 uppercase">
                     Informasi produk
                 </h2>
 
@@ -137,8 +137,8 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                 </div>
             </section>
 
-            <section className="rounded-xl border border-neutral-200 bg-white p-6">
-                <h2 className="mb-4 text-sm font-semibold tracking-wide text-neutral-500 uppercase">
+            <section className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
+                <h2 className="mb-4 text-sm font-semibold tracking-wide text-pcr-700 uppercase">
                     Poster & tautan
                 </h2>
 
@@ -161,7 +161,7 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                     type="file"
                                     accept="image/jpeg,image/png,image/webp"
                                     onChange={handlePoster}
-                                    className="block text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-900 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-neutral-700"
+                                    className="block text-sm text-neutral-600 file:mr-3 file:rounded-lg file:border-0 file:bg-pcr-600 file:px-3 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-pcr-700"
                                 />
                                 {shownPoster && (
                                     <button
@@ -171,7 +171,7 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                             setData('remove_poster', true);
                                             setPosterPreview(null);
                                         }}
-                                        className="text-xs font-medium text-red-600 hover:underline"
+                                        className="text-xs font-medium text-pcrred-600 hover:underline"
                                     >
                                         Hapus poster
                                     </button>
@@ -212,15 +212,15 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                 </div>
             </section>
 
-            <section className="rounded-xl border border-neutral-200 bg-white p-6">
+            <section className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
                 <div className="mb-4 flex items-center justify-between">
-                    <h2 className="text-sm font-semibold tracking-wide text-neutral-500 uppercase">
+                    <h2 className="text-sm font-semibold tracking-wide text-pcr-700 uppercase">
                         Anggota mahasiswa
                     </h2>
                     <button
                         type="button"
                         onClick={addStudent}
-                        className="rounded-lg border border-neutral-300 px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                        className="shrink-0 rounded-lg border border-neutral-300 px-3 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                         + Tambah anggota
                     </button>
@@ -235,7 +235,7 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                         {students.map((student, index) => (
                             <div
                                 key={index}
-                                className="grid items-start gap-3 rounded-lg bg-neutral-50 p-3 sm:grid-cols-[1.4fr_1fr_1fr_auto]"
+                                className="grid items-start gap-2 rounded-lg bg-neutral-50 p-3 sm:grid-cols-[1.4fr_1fr_1fr_auto] sm:gap-3"
                             >
                                 <div>
                                     <input
@@ -246,7 +246,7 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                         onChange={(e) => updateStudent(index, 'name', e.target.value)}
                                     />
                                     {errors[`students.${index}.name`] && (
-                                        <p className="mt-1 text-xs text-red-600">
+                                        <p className="mt-1 text-xs text-pcrred-600">
                                             {errors[`students.${index}.name`]}
                                         </p>
                                     )}
@@ -268,7 +268,7 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                 <button
                                     type="button"
                                     onClick={() => removeStudent(index)}
-                                    className="rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                                    className="rounded-lg border border-pcrred-200 px-3 py-2.5 text-sm font-medium text-pcrred-600 hover:bg-pcrred-50 sm:border-transparent"
                                 >
                                     Hapus
                                 </button>
@@ -278,8 +278,8 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                 )}
             </section>
 
-            <section className="rounded-xl border border-neutral-200 bg-white p-6">
-                <h2 className="mb-4 text-sm font-semibold tracking-wide text-neutral-500 uppercase">
+            <section className="rounded-xl border border-neutral-200 bg-white p-4 sm:p-6">
+                <h2 className="mb-4 text-sm font-semibold tracking-wide text-pcr-700 uppercase">
                     Pembimbing & teknologi
                 </h2>
 
@@ -296,11 +296,11 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                 {options.dosen.map((dosen) => (
                                     <label
                                         key={dosen.id}
-                                        className="flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-sm hover:bg-neutral-50"
+                                        className="flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2.5 text-sm hover:bg-neutral-50"
                                     >
                                         <input
                                             type="checkbox"
-                                            className="size-4 rounded border-neutral-300 text-neutral-900 focus:ring-neutral-900"
+                                            className="size-4 rounded border-neutral-300 text-pcr-600 focus:ring-pcr-600"
                                             checked={(data.dosen_ids ?? []).includes(dosen.id)}
                                             onChange={() => toggleInArray('dosen_ids', dosen.id)}
                                         />
@@ -321,10 +321,10 @@ export default function ProductForm({ data, setData, errors, options, existingPo
                                         key={tag.id}
                                         type="button"
                                         onClick={() => toggleInArray('tags', tag.id)}
-                                        className={`rounded-full border px-3 py-1.5 text-sm font-medium transition ${
+                                        className={`rounded-full border px-3.5 py-2.5 text-sm font-medium transition ${
                                             active
-                                                ? 'border-neutral-900 bg-neutral-900 text-white'
-                                                : 'border-neutral-300 text-neutral-700 hover:bg-neutral-50'
+                                                ? 'border-pcr-600 bg-pcr-600 text-white'
+                                                : 'border-neutral-300 text-neutral-700 hover:bg-pcr-50'
                                         }`}
                                     >
                                         {tag.name}

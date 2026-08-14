@@ -4,7 +4,7 @@ import DosenLayout from '@/Layouts/DosenLayout';
 
 const STATUS_STYLES = {
     draft: 'bg-amber-100 text-amber-800',
-    published: 'bg-emerald-100 text-emerald-800',
+    published: 'bg-pcr-100 text-pcr-800',
     archived: 'bg-neutral-200 text-neutral-700',
 };
 
@@ -48,7 +48,7 @@ export default function Index({ products, filters, stats }) {
             action={
                 <Link
                     href="/dosen/produk/create"
-                    className="rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700"
+                    className="block rounded-lg bg-pcr-600 px-4 py-2.5 text-center text-sm font-medium text-white hover:bg-pcr-700 sm:inline-block sm:py-2"
                 >
                     + Tambah produk
                 </Link>
@@ -56,8 +56,8 @@ export default function Index({ products, filters, stats }) {
         >
             <Head title="Produk saya" />
 
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-                <div className="flex flex-wrap gap-2">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
                     {FILTERS.map((filter) => {
                         const active = (filters.status ?? '') === filter.value;
 
@@ -65,14 +65,14 @@ export default function Index({ products, filters, stats }) {
                             <button
                                 key={filter.value || 'all'}
                                 onClick={() => applyFilters({ status: filter.value })}
-                                className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition ${
+                                className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-medium transition ${
                                     active
-                                        ? 'border-neutral-900 bg-neutral-900 text-white'
-                                        : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
+                                        ? 'border-pcr-600 bg-pcr-600 text-white'
+                                        : 'border-neutral-300 bg-white text-neutral-700 hover:bg-pcr-50'
                                 }`}
                             >
                                 {filter.label}
-                                <span className={active ? 'ml-1.5 text-neutral-300' : 'ml-1.5 text-neutral-400'}>
+                                <span className={active ? 'ml-1.5 text-pcr-200' : 'ml-1.5 text-neutral-400'}>
                                     {stats[filter.statKey]}
                                 </span>
                             </button>
@@ -81,7 +81,7 @@ export default function Index({ products, filters, stats }) {
                 </div>
 
                 <form
-                    className="ml-auto flex gap-2"
+                    className="flex gap-2 sm:ml-auto"
                     onSubmit={(e) => {
                         e.preventDefault();
                         applyFilters();
@@ -92,11 +92,11 @@ export default function Index({ products, filters, stats }) {
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Cari judul atau deskripsi…"
-                        className="w-64 rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900"
+                        className="w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-pcr-600 focus:ring-1 focus:ring-pcr-600 sm:w-64 sm:py-2"
                     />
                     <button
                         type="submit"
-                        className="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                        className="shrink-0 rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                         Cari
                     </button>
@@ -113,7 +113,7 @@ export default function Index({ products, filters, stats }) {
                     </p>
                 </div>
             ) : (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     {products.data.map((product) => (
                         <article
                             key={product.id}
@@ -135,7 +135,7 @@ export default function Index({ products, filters, stats }) {
 
                             <div className="flex flex-1 flex-col p-4">
                                 <div className="mb-2 flex items-start justify-between gap-2">
-                                    <h3 className="font-semibold text-neutral-900">{product.title}</h3>
+                                    <h3 className="font-semibold text-pcr-800">{product.title}</h3>
                                     <span
                                         className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[product.status]}`}
                                     >
@@ -159,13 +159,13 @@ export default function Index({ products, filters, stats }) {
                                     <div className="flex gap-2">
                                         <Link
                                             href={`/dosen/produk/${product.slug}/edit`}
-                                            className="rounded-lg px-2.5 py-1.5 text-sm font-medium text-neutral-700 hover:bg-neutral-100"
+                                            className="rounded-lg px-3 py-2 text-sm font-medium text-pcr-700 hover:bg-pcr-50"
                                         >
                                             Edit
                                         </Link>
                                         <button
                                             onClick={() => setConfirming(product)}
-                                            className="rounded-lg px-2.5 py-1.5 text-sm font-medium text-red-600 hover:bg-red-50"
+                                            className="rounded-lg px-3 py-2 text-sm font-medium text-pcrred-600 hover:bg-pcrred-50"
                                         >
                                             Hapus
                                         </button>
@@ -184,10 +184,10 @@ export default function Index({ products, filters, stats }) {
                             key={index}
                             disabled={!link.url}
                             onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
-                            className={`min-w-9 rounded-lg border px-3 py-1.5 text-sm ${
+                            className={`min-w-10 rounded-lg border px-3 py-2 text-sm ${
                                 link.active
-                                    ? 'border-neutral-900 bg-neutral-900 text-white'
-                                    : 'border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-50'
+                                    ? 'border-pcr-600 bg-pcr-600 text-white'
+                                    : 'border-neutral-300 bg-white text-neutral-700 hover:bg-pcr-50'
                             } disabled:cursor-default disabled:opacity-40`}
                             dangerouslySetInnerHTML={{ __html: link.label }}
                         />
@@ -196,24 +196,24 @@ export default function Index({ products, filters, stats }) {
             )}
 
             {confirming && (
-                <div className="fixed inset-0 z-50 grid place-items-center bg-neutral-900/50 p-6">
+                <div className="fixed inset-0 z-50 grid place-items-center bg-pcr-900/60 p-6">
                     <div className="w-full max-w-md rounded-xl bg-white p-6">
-                        <h2 className="text-lg font-semibold text-neutral-900">Hapus produk?</h2>
+                        <h2 className="text-lg font-semibold text-pcr-800">Hapus produk?</h2>
                         <p className="mt-2 text-sm text-neutral-600">
                             “{confirming.title}” akan dihapus permanen beserta data anggota
                             mahasiswa dan posternya. Tindakan ini tidak bisa dibatalkan.
                         </p>
-                        <div className="mt-6 flex justify-end gap-3">
+                        <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                             <button
                                 onClick={() => setConfirming(null)}
-                                className="rounded-lg border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                                className="rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                             >
                                 Batal
                             </button>
                             <button
                                 onClick={destroy}
                                 disabled={deleteForm.processing}
-                                className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-50"
+                                className="rounded-lg bg-pcrred-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-pcrred-600 disabled:opacity-50"
                             >
                                 {deleteForm.processing ? 'Menghapus…' : 'Ya, hapus'}
                             </button>

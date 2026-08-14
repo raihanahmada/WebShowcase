@@ -37,7 +37,7 @@ export default function Edit({ product, options }) {
             action={
                 <Link
                     href="/dosen/produk"
-                    className="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    className="block rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-center text-sm font-medium text-neutral-700 hover:bg-pcr-50 sm:inline-block sm:py-2"
                 >
                     Batal
                 </Link>
@@ -59,22 +59,22 @@ export default function Edit({ product, options }) {
                     existingPosterUrl={product.poster_url}
                 />
 
-                <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                     <button
                         type="button"
                         disabled={form.processing}
                         onClick={() => submit('archived')}
-                        className="rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-600 hover:bg-neutral-50 disabled:opacity-50"
+                        className="w-full rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-600 hover:bg-neutral-100 disabled:opacity-50 sm:w-auto"
                     >
                         Arsipkan
                     </button>
 
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap">
                         <button
                             type="button"
                             disabled={form.processing}
                             onClick={() => submit('draft')}
-                            className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                            className="w-full rounded-lg border border-pcr-300 bg-white px-5 py-2.5 text-sm font-medium text-pcr-700 hover:bg-pcr-50 disabled:opacity-50 sm:w-auto"
                         >
                             Simpan sebagai draft
                         </button>
@@ -82,7 +82,7 @@ export default function Edit({ product, options }) {
                             type="button"
                             disabled={form.processing}
                             onClick={() => submit('published')}
-                            className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
+                            className="w-full rounded-lg bg-pcr-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-pcr-700 disabled:opacity-50 sm:w-auto"
                         >
                             {form.processing ? 'Menyimpan…' : 'Simpan & publikasikan'}
                         </button>

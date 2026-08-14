@@ -36,7 +36,7 @@ export default function Create({ options }) {
             action={
                 <Link
                     href="/dosen/produk"
-                    className="rounded-lg border border-neutral-300 bg-white px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                    className="block rounded-lg border border-neutral-300 bg-white px-4 py-2.5 text-center text-sm font-medium text-neutral-700 hover:bg-pcr-50 sm:inline-block sm:py-2"
                 >
                     Batal
                 </Link>
@@ -58,12 +58,12 @@ export default function Create({ options }) {
                     existingPosterUrl={null}
                 />
 
-                <div className="mt-6 flex flex-wrap justify-end gap-3">
+                <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:justify-end">
                     <button
                         type="button"
                         disabled={form.processing}
                         onClick={() => submit('draft')}
-                        className="rounded-lg border border-neutral-300 bg-white px-5 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 disabled:opacity-50"
+                        className="w-full rounded-lg border border-pcr-300 bg-white px-5 py-2.5 text-sm font-medium text-pcr-700 hover:bg-pcr-50 disabled:opacity-50 sm:w-auto"
                     >
                         Simpan sebagai draft
                     </button>
@@ -71,7 +71,7 @@ export default function Create({ options }) {
                         type="button"
                         disabled={form.processing}
                         onClick={() => submit('published')}
-                        className="rounded-lg bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-neutral-700 disabled:opacity-50"
+                        className="w-full rounded-lg bg-pcr-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-pcr-700 disabled:opacity-50 sm:w-auto"
                     >
                         {form.processing ? 'Menyimpan…' : 'Publikasikan'}
                     </button>

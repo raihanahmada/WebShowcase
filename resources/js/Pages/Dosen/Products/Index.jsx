@@ -147,12 +147,15 @@ export default function Index({ products, filters, stats }) {
                                     {product.category}
                                     {product.course && ` · ${product.course}`}
                                 </p>
-                                <p className="mt-0.5 text-xs text-neutral-500">
+                                <p className="mt-0.5 mb-4 text-xs text-neutral-500">
                                     {product.academic_year} · Semester {product.semester} ·{' '}
                                     {product.views_count} dilihat
                                 </p>
 
-                                <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
+                                {/* mt-auto mendorong baris aksi ke dasar kartu, supaya tetap
+                                    sejajar walau judul atau keterangan di atasnya memanjang
+                                    sampai dua baris. */}
+                                <div className="mt-auto flex items-center justify-between gap-2 border-t border-neutral-100 pt-3">
                                     <span className="text-xs text-neutral-400">
                                         Diubah {product.updated_at}
                                     </span>

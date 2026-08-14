@@ -31,7 +31,11 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('guest.home'));
+        $destination = Auth::user()->isDosen()
+            ? route('dosen.dashboard')
+            : route('guest.home');
+
+        return redirect()->intended($destination);
     }
 
     public function destroy(Request $request): RedirectResponse

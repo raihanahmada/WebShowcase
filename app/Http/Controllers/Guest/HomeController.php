@@ -3,11 +3,67 @@
 namespace App\Http\Controllers\Guest;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request): Response
     {
-        return view('guest.home');
+        $search = $request->string('search')->trim()->value();
+        $category = $request->string('category')->value();
+        $academicYear = $request->string('academic_year')->value();
+
+        $products = Product::query()
+            ->published()
+            ->with(['category:id,name,slug', 'students:id,product_id,name'])
+            ->when($search, function (Builder $query, string $search) {
+                $query->where(function (Builder $inner) use ($search) {
+                    $inner->where('title', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($category, function (Builder $query, string $category) {
+                $query->whereHas('category', fn (Builder $q) => $q->where('slug', $category));
+            })
+            ->when($academicYear, function (Builder $query, string $academicYear) {
+                $query->where('academic_year', $academicYear);
+            })
+            ->latest('published_at')
+            ->paginate(9)
+            ->withQueryString()
+            ->through(fn (Product $product) => [
+                'id' => $product->id,
+                'slug' => $product->slug,
+                'title' => $product->title,
+                'academic_year' => $product->academic_year,
+                'poster_url' => $product->posterUrl(),
+                'category' => $product->category?->name,
+                'students' => $product->students->pluck('name'),
+            ]);
+
+        $categories = Category::orderBy('name')->get(['id', 'name', 'slug']);
+
+        $academicYears = Product::query()
+            ->published()
+            ->select('academic_year')
+            ->distinct()
+            ->orderByDesc('academic_year')
+            ->pluck('academic_year');
+
+        return Inertia::render('Guest/Home', [
+            'products' => $products,
+            'categories' => $categories,
+            'academicYears' => $academicYears,
+            'filters' => [
+                'search' => $search,
+                'category' => $category,
+                'academic_year' => $academicYear,
+            ],
+        ]);
     }
 }

@@ -10,14 +10,8 @@ Route::name('guest.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/produk/{product}', [ProductController::class, 'show'])->name('products.show');
 });
-
 require __DIR__.'/auth.php';
 
-/*
- * Area dosen. Middleware `auth` sengaja tetap dipasang meskipun halaman
- * login masih dikerjakan anggota lain — begitu login jadi, bagian ini
- * langsung tersambung tanpa perlu diubah.
- */
 Route::middleware(['auth', 'dosen'])
     ->prefix('dosen')
     ->name('dosen.')

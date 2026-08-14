@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 #[Fillable(['name', 'email', 'password', 'role', 'nip', 'avatar'])]
 #[Hidden(['password', 'remember_token'])]
@@ -22,6 +24,24 @@ class User extends Authenticatable
     public function isDosen(): bool
     {
         return $this->role === 'dosen';
+    }
+
+    /**
+     * URL foto profil, null kalau belum pernah diunggah.
+     */
+    public function avatarUrl(): ?string
+    {
+        return $this->avatar ? Storage::disk('public')->url($this->avatar) : null;
+    }
+
+    /**
+     * Inisial untuk dipakai sebagai pengganti foto profil.
+     */
+    public function initials(): string
+    {
+        preg_match_all('/\b[\p{L}]/u', $this->name ?? '', $m);
+
+        return Str::upper(implode('', array_slice($m[0], 0, 2))) ?: '?';
     }
 
     public function isAdmin(): bool

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dosen\ProductController;
+use App\Http\Controllers\Dosen\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,4 +26,11 @@ Route::middleware(['auth', 'dosen'])
             ->parameters(['produk' => 'product'])
             ->names('products')
             ->except(['show']);
+
+        Route::get('profil', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profil', [ProfileController::class, 'update'])->name('profile.update');
+        Route::put('profil/password', [ProfileController::class, 'updatePassword'])
+            ->name('profile.password');
+
+        Route::post('logout', [ProfileController::class, 'logout'])->name('logout');
     });

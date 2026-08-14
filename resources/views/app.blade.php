@@ -6,6 +6,9 @@
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+        {{-- Wajib sebelum @vite: menyuntikkan preamble React Fast Refresh.
+             Tanpa ini halaman blank saat `npm run dev`. --}}
+        @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])
         @inertiaHead
     </head>

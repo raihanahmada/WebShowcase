@@ -24,6 +24,9 @@ export default defineConfig({
         },
     },
     server: {
+        // Tanpa ini Vite hanya mengikat ke IPv6 ([::1]) dan public/hot berisi
+        // alamat yang tidak selalu bisa dijangkau browser.
+        host: '127.0.0.1',
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },

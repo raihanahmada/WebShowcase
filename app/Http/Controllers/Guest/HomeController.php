@@ -71,12 +71,29 @@ class HomeController extends Controller
                 ->count(),
         ];
 
+        // Poster produk yang benar-benar sudah diunggah dosen, dipakai untuk
+        // carousel & background dekoratif di beranda. Belum tentu semua
+        // produk published sudah punya poster, jadi yang kosong disaring.
+        $posters = Product::query()
+            ->published()
+            ->whereNotNull('poster_path')
+            ->latest('published_at')
+            ->limit(12)
+            ->get(['id', 'slug', 'title', 'poster_path'])
+            ->map(fn (Product $product) => [
+                'image' => $product->posterUrl(),
+                'title' => $product->title,
+                'slug' => $product->slug,
+            ])
+            ->values();
+
         return Inertia::render('Guest/Home', [
             'products' => $products,
             'categories' => $categories,
             'academicYears' => $academicYears,
             'tags' => $tags,
             'stats' => $stats,
+            'posters' => $posters,
             'filters' => [
                 'search' => $search,
                 'category' => $category,

@@ -12,91 +12,100 @@ export default function GuestLayout({ children }) {
             e.preventDefault();
             document.getElementById('produk')?.scrollIntoView({ behavior: 'smooth' });
         }
-        // Kalau bukan di halaman beranda, biarkan link jalan normal ke "/#produk"
-        // supaya browser reload halaman lalu lompat ke bagian produk.
     };
 
+    // Jika di halaman beranda (ada foto gelap), teks nav menjadi putih.
+    // Jika di halaman lain (latar terang), teks nav menjadi gelap.
+    const navTextColor = isHome
+        ? "text-white drop-shadow-md hover:text-white/80"
+        : "text-neutral-700 hover:text-pcr-700";
+
     return (
-        <div className="relative min-h-screen font-sans text-neutral-900 selection:bg-pcr-200 selection:text-pcr-900">
+        <div className="relative min-h-screen font-sans text-neutral-900 selection:bg-pcr-200 selection:text-pcr-900 bg-[#f5f4ef]">
 
-            {/* --- BACKGROUND MELINGKAR ALA PMB PCR --- */}
-            <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#eaf4fc]">
-                {/* Gelombang/Lingkaran Kanan Atas */}
-                <div className="absolute -right-[15%] -top-[20%] h-[1200px] w-[1200px] rounded-full bg-white/60 sm:-right-[5%] sm:-top-[10%] sm:h-[1500px] sm:w-[1500px]"></div>
+            {/* --- Latar "kertas gambar teknik" --- */}
+            <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(to_right,#00252e0a_1px,transparent_1px),linear-gradient(to_bottom,#00252e0a_1px,transparent_1px)] bg-size-[48px_48px]" />
 
-                {/* Gelombang/Lingkaran Kiri Bawah */}
-                <div className="absolute -bottom-[30%] -left-[20%] h-[1000px] w-[1000px] rounded-full bg-white/70 sm:-bottom-[40%] sm:-left-[10%] sm:h-[1400px] sm:w-[1400px]"></div>
+                <div className="absolute -top-40 -right-32 h-104 w-104 rounded-full border-2 border-pcr-200/70" />
+                <div className="absolute -top-24 -right-16 h-64 w-64 rounded-full border border-dashed border-pcrred-200" />
+                <div className="absolute -bottom-48 -left-40 h-120 w-120 rounded-full border-2 border-pcrred-100" />
+                <div className="absolute bottom-16 left-24 h-40 w-40 rounded-full border border-dashed border-pcr-200/70" />
 
-                {/* Aksen Lingkaran Biru Lebih Tua (Opsional untuk kedalaman) */}
-                <div className="absolute left-[10%] top-[20%] h-[600px] w-[600px] rounded-full bg-[#dbeafe]/40 blur-3xl"></div>
-                <div className="absolute bottom-[10%] right-[10%] h-[500px] w-[500px] rounded-full bg-[#dbeafe]/50 blur-3xl"></div>
+                <span className="absolute top-[22%] left-[8%] text-2xl leading-none text-pcr-300/70">+</span>
+                <span className="absolute top-[68%] left-[18%] text-lg leading-none text-pcrred-300/70">+</span>
+                <span className="absolute top-[38%] right-[12%] text-lg leading-none text-pcrred-300/60">+</span>
+                <span className="absolute top-[82%] right-[22%] text-2xl leading-none text-pcr-300/70">+</span>
             </div>
             {/* ---------------------------------------- */}
 
-            {/* Konten Utama (z-10 agar berada di atas background) */}
             <div className="relative z-10 flex min-h-screen flex-col">
-                {/* Header (Dibuat lebih transparan agar background tembus) */}
-                <header className="sticky top-0 z-50 border-b border-white/40 bg-white/40 py-2 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.02)] transition-all">
-                    <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-2 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-                        <Link href="/" className="group flex items-center gap-3 transition-opacity hover:opacity-80">
-                            <Logo />
-                            <span className="hidden border-l border-neutral-400/50 pl-3 text-sm font-medium text-neutral-600 lg:block">
-                                Katalog Produk TI
-                            </span>
+
+                {/* --- HEADER MELAYANG (FLOATING) SESUAI REFERENSI GAMBAR --- */}
+                <header className="absolute inset-x-0 top-0 z-50 mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-6 sm:px-6 lg:px-8">
+
+                    {/* Pill Kiri: Logo saja (bentuk kapsul putih) */}
+                    <Link
+                        href="/"
+                        className="flex shrink-0 items-center justify-center rounded-full bg-white px-6 py-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.12)] transition-transform hover:scale-105"
+                    >
+                        <Logo />
+                    </Link>
+
+                    {/* Tengah: Navigasi Teks */}
+                    <nav className="hidden items-center gap-8 md:flex">
+                        <Link
+                            href="/"
+                            className={`text-sm font-bold transition-colors ${navTextColor}`}
+                        >
+                            Beranda
                         </Link>
+                        <a
+                            href="/#produk"
+                            onClick={goToProduk}
+                            className={`text-sm font-bold transition-colors ${navTextColor}`}
+                        >
+                            Produk
+                        </a>
+                    </nav>
 
-                        <nav className="flex items-center gap-4 sm:gap-6">
+                    {/* Pill Kanan: Tombol Masuk / Profil (bentuk kapsul putih) */}
+                    <div className="flex shrink-0 items-center rounded-full bg-white p-1.5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                        {user ? (
                             <Link
-                                href="/"
-                                className="text-sm font-medium text-neutral-600 transition-colors hover:text-pcr-700"
+                                href={user.role === 'dosen' ? '/dosen/produk' : '/'}
+                                className="group flex items-center gap-2.5 rounded-full py-1 pr-4 pl-1 transition-all hover:bg-neutral-100"
                             >
-                                Beranda
+                                <Avatar user={user} size={30} className="rounded-full shadow-sm" />
+                                <span className="hidden text-sm font-bold text-neutral-800 group-hover:text-pcr-800 sm:block">
+                                    {user.name}
+                                </span>
                             </Link>
-
-                            <a
-                                href="/#produk"
-                                onClick={goToProduk}
-                                className="text-sm font-medium text-neutral-600 transition-colors hover:text-pcr-700"
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-bold text-neutral-800 transition-colors hover:bg-neutral-100"
                             >
-                                Produk
-                            </a>
-
-                            {user ? (
-                                <Link
-                                    href={user.role === 'dosen' ? '/dosen/produk' : '/'}
-                                    className="group flex items-center gap-2.5 rounded-full border border-white/60 bg-white/80 px-3 py-1.5 transition-all hover:bg-white hover:shadow-sm"
-                                >
-                                    <Avatar user={user} size={28} className="rounded-full shadow-sm" />
-                                    <span className="text-sm font-semibold text-neutral-700 group-hover:text-pcr-800">
-                                        {user.name}
-                                    </span>
-                                </Link>
-                            ) : (
-                                <Link
-                                    href="/login"
-                                    className="inline-flex items-center gap-2 rounded-full bg-[#0086ff] px-5 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-blue-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                    style={{ paddingTop: '0.5rem', paddingBottom: '0.5rem' }}
-                                >
-                                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                                    </svg>
-                                    Masuk
-                                </Link>
-                            )}
-                        </nav>
+                                <span>Masuk</span>
+                                <svg className="h-4 w-4 text-neutral-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </Link>
+                        )}
                     </div>
                 </header>
+                {/* -------------------------------------------------------- */}
 
-                <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8 sm:py-12">
+                <main className={`mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8 ${isHome ? 'pb-12' : 'py-8 sm:py-12'}`}>
                     {children}
                 </main>
 
-                <footer className="mt-auto border-t border-white/50 bg-white/30 backdrop-blur-sm">
+                <footer className="mt-auto border-t border-pcr-700 bg-pcr-900 relative z-20">
                     <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
-                        <div >
-                            <Logo height={24} />
-                        </div>
-                        <p className="text-center text-sm font-medium text-neutral-500 sm:text-right">
+                        <span className="text-lg font-extrabold tracking-tight text-white">
+                            ARSIP KARYA
+                        </span>
+                        <p className="text-center text-sm font-medium text-pcr-200 sm:text-right">
                             © {new Date().getFullYear()} Arsip Karya. <br className="sm:hidden" />
                             <span className="hidden sm:inline"> — </span>
                             Jurusan Teknik Informatika Politeknik Caltex Riau.

@@ -3,7 +3,18 @@ import Avatar from '@/Components/Avatar';
 import Logo from '@/Components/Logo';
 
 export default function GuestLayout({ children }) {
-    const user = usePage().props.auth?.user;
+    const { props, url } = usePage();
+    const user = props.auth?.user;
+    const isHome = url === '/' || url.startsWith('/?');
+
+    const goToProduk = (e) => {
+        if (isHome) {
+            e.preventDefault();
+            document.getElementById('produk')?.scrollIntoView({ behavior: 'smooth' });
+        }
+        // Kalau bukan di halaman beranda, biarkan link jalan normal ke "/#produk"
+        // supaya browser reload halaman lalu lompat ke bagian produk.
+    };
 
     return (
         <div className="relative min-h-screen font-sans text-neutral-900 selection:bg-pcr-200 selection:text-pcr-900">
@@ -41,6 +52,14 @@ export default function GuestLayout({ children }) {
                             >
                                 Beranda
                             </Link>
+
+                            <a
+                                href="/#produk"
+                                onClick={goToProduk}
+                                className="text-sm font-medium text-neutral-600 transition-colors hover:text-pcr-700"
+                            >
+                                Produk
+                            </a>
 
                             {user ? (
                                 <Link

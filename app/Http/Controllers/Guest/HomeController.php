@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Guest;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductStudent;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -44,6 +46,7 @@ class HomeController extends Controller
                 'poster_url' => $product->posterUrl(),
                 'category' => $product->category?->name,
                 'students' => $product->students->pluck('name'),
+                'published_at' => $product->published_at?->toIso8601String(),
             ]);
 
         $categories = Category::orderBy('name')->get(['id', 'name', 'slug']);
@@ -55,10 +58,25 @@ class HomeController extends Controller
             ->orderByDesc('academic_year')
             ->pluck('academic_year');
 
+        $tags = Tag::query()
+            ->whereHas('products', fn (Builder $query) => $query->published())
+            ->orderBy('name')
+            ->pluck('name');
+
+        $stats = [
+            'products' => Product::query()->published()->count(),
+            'categories' => Category::query()->count(),
+            'students' => ProductStudent::query()
+                ->whereHas('product', fn (Builder $query) => $query->published())
+                ->count(),
+        ];
+
         return Inertia::render('Guest/Home', [
             'products' => $products,
             'categories' => $categories,
             'academicYears' => $academicYears,
+            'tags' => $tags,
+            'stats' => $stats,
             'filters' => [
                 'search' => $search,
                 'category' => $category,

@@ -2,7 +2,17 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import GuestLayout from '@/Layouts/GuestLayout';
 
-export default function Home({ products, categories, academicYears, filters }) {
+const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000;
+
+function isRecentlyPublished(publishedAt) {
+    if (!publishedAt) {
+        return false;
+    }
+
+    return Date.now() - new Date(publishedAt).getTime() < FOURTEEN_DAYS_MS;
+}
+
+export default function Home({ products, categories, academicYears, tags, stats, filters }) {
     const [search, setSearch] = useState(filters.search ?? '');
 
     const applyFilters = (overrides = {}) => {
@@ -49,10 +59,10 @@ export default function Home({ products, categories, academicYears, filters }) {
                     {/* Tombol Aksi (Opsional, jika diperlukan) */}
                     <div className="flex flex-wrap items-center gap-4 pt-2">
                          <a
-                            href="#katalog"
+                            href="#produk"
                             onClick={(e) => {
                                 e.preventDefault();
-                                document.getElementById('katalog')?.scrollIntoView({ behavior: 'smooth' });
+                                document.getElementById('produk')?.scrollIntoView({ behavior: 'smooth' });
                             }}
                             className="rounded-lg bg-pcr-600 px-6 py-3 text-sm font-semibold text-white shadow-md transition-all hover:bg-pcr-700 hover:shadow-lg"
                         >
@@ -89,17 +99,45 @@ export default function Home({ products, categories, academicYears, filters }) {
                 </div>
             </section>
 
-             {/*
-               Tambahkan id="katalog" pada bagian yang membungkus form pencarian
-               agar tombol "Jelajahi Karya" bisa scroll otomatis ke sini.
-             */}
-             <div id="katalog" className="pt-8">
-                 {/* Search & Filter Section Anda taruh di sini */}
-                 <section className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                     {/* ... Form pencarian yang tadi diperbarui ... */}
-                 </section>
-                 {/* ... Kategoris dan Grid Produk ... */}
-             </div>
+            {/* Stats Strip */}
+            <section className="mb-10 grid grid-cols-3 gap-3 rounded-2xl border border-white/60 bg-white/60 p-4 shadow-sm backdrop-blur-md sm:gap-6 sm:p-6">
+                <div className="text-center">
+                    <p className="text-2xl font-extrabold text-pcr-700 sm:text-3xl">{stats.products}+</p>
+                    <p className="mt-1 text-xs font-medium text-neutral-500 sm:text-sm">Karya Dipublikasikan</p>
+                </div>
+                <div className="border-x border-neutral-200/70 text-center">
+                    <p className="text-2xl font-extrabold text-pcr-700 sm:text-3xl">{stats.categories}</p>
+                    <p className="mt-1 text-xs font-medium text-neutral-500 sm:text-sm">Kategori</p>
+                </div>
+                <div className="text-center">
+                    <p className="text-2xl font-extrabold text-pcr-700 sm:text-3xl">{stats.students}+</p>
+                    <p className="mt-1 text-xs font-medium text-neutral-500 sm:text-sm">Mahasiswa Terlibat</p>
+                </div>
+            </section>
+
+            {/* Tech Marquee */}
+            {tags.length > 0 && (
+                <section className="mb-12">
+                    <p className="mb-3 text-center text-xs font-semibold tracking-widest text-neutral-400 uppercase">
+                        Teknologi yang dipakai mahasiswa
+                    </p>
+                    <div className="relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                        <div className="animate-marquee flex w-max gap-3">
+                            {[...tags, ...tags].map((tag, index) => (
+                                <span
+                                    key={`${tag}-${index}`}
+                                    className="shrink-0 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm font-medium text-neutral-600 shadow-sm"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Bagian Produk — sasaran scroll dari tab nav "Produk" & tombol "Jelajahi Karya" */}
+            <div id="produk" className="scroll-mt-24 pt-4">
 
             {/* Search & Filter Section */}
             <section className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -209,7 +247,12 @@ export default function Home({ products, categories, academicYears, filters }) {
                             href={`/produk/${product.slug}`}
                             className="group flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-pcr-300"
                         >
-                            <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
+                            <div className="relative aspect-4/3 overflow-hidden bg-neutral-100">
+                                {isRecentlyPublished(product.published_at) && (
+                                    <span className="absolute top-3 left-3 z-10 inline-flex items-center gap-1 rounded-full bg-pcrred-500 px-2.5 py-1 text-[11px] font-bold tracking-wide text-white uppercase shadow-md">
+                                        ✨ Baru
+                                    </span>
+                                )}
                                 {product.poster_url ? (
                                     <img
                                         src={product.poster_url}
@@ -227,7 +270,7 @@ export default function Home({ products, categories, academicYears, filters }) {
                                     </div>
                                 )}
                                 {/* Overlay Gradient untuk mempertegas area gambar */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                                <div className="absolute inset-0 bg-linear-to-t from-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                             </div>
 
                             <div className="flex flex-1 flex-col p-5">
@@ -277,7 +320,7 @@ export default function Home({ products, categories, academicYears, filters }) {
                             key={index}
                             disabled={!link.url}
                             onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
-                            className={`flex min-w-[2.5rem] items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
+                            className={`flex min-w-10 items-center justify-center rounded-lg border px-3 py-2 text-sm font-medium transition-all ${
                                 link.active
                                     ? 'border-pcr-600 bg-pcr-600 text-white shadow-md'
                                     : 'border-neutral-200 bg-white text-neutral-600 hover:border-neutral-300 hover:bg-neutral-50'
@@ -287,6 +330,7 @@ export default function Home({ products, categories, academicYears, filters }) {
                     ))}
                 </div>
             )}
+            </div>
         </GuestLayout>
     );
 }

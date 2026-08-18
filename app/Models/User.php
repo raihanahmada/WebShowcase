@@ -14,7 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-#[Fillable(['name', 'email', 'password', 'role', 'nip', 'avatar'])]
+#[Fillable(['name', 'email', 'password', 'role', 'nip', 'avatar', 'is_active'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -49,6 +49,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isActive(): bool
+    {
+        return (bool) $this->is_active;
+    }
+
     /**
      * Produk yang dia bimbing. Ini yang menentukan hak akses, bukan `products`.
      *
@@ -79,6 +84,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 }

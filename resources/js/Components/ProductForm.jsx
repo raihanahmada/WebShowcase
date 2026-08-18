@@ -8,7 +8,15 @@ const ACADEMIC_YEARS = Array.from({ length: 5 }, (_, i) => {
     return `${start}/${start + 1}`;
 });
 
-export default function ProductForm({ data, setData, errors, options, existingPosterUrl }) {
+export default function ProductForm({
+    data,
+    setData,
+    errors,
+    options,
+    existingPosterUrl,
+    dosenFieldLabel = 'Dosen pembimbing lain',
+    dosenFieldHint = 'Kamu otomatis tercatat sebagai pembimbing. Dosen yang dipilih di sini juga bisa mengedit produk ini.',
+}) {
     const [posterPreview, setPosterPreview] = useState(null);
 
     const students = data.students ?? [];
@@ -285,9 +293,9 @@ export default function ProductForm({ data, setData, errors, options, existingPo
 
                 <div className="space-y-5">
                     <Field
-                        label="Dosen pembimbing lain"
+                        label={dosenFieldLabel}
                         error={errors.dosen_ids}
-                        hint="Kamu otomatis tercatat sebagai pembimbing. Dosen yang dipilih di sini juga bisa mengedit produk ini."
+                        hint={dosenFieldHint}
                     >
                         {options.dosen.length === 0 ? (
                             <p className="text-sm text-neutral-500">Belum ada dosen lain terdaftar.</p>

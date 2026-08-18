@@ -32,11 +32,21 @@ class LoginController extends Controller
             ]);
         }
 
+        if (! Auth::user()->isActive()) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => 'Akun ini sudah dinonaktifkan. Hubungi admin prodi kalau ini keliru.',
+            ]);
+        }
+
         $request->session()->regenerate();
 
-        $destination = Auth::user()->isDosen()
-            ? route('dosen.dashboard')
-            : route('guest.home');
+        $destination = match (true) {
+            Auth::user()->isDosen() => route('dosen.dashboard'),
+            Auth::user()->isAdmin() => route('admin.dashboard'),
+            default => route('guest.home'),
+        };
 
         return redirect()->intended($destination);
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsDosen;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'dosen' => EnsureUserIsDosen::class,
+            'admin' => EnsureUserIsAdmin::class,
         ]);
 
         // Diarahkan ke path, bukan route bernama `login`, supaya tamu tetap
